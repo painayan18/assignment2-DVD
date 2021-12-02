@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.*;
+import java.util.Comparator;
 import java.util.Locale;
 
 public class DVDCollection {
@@ -45,7 +46,7 @@ public class DVDCollection {
 		for (int i = 0; i <+ numdvds; i++) {
 			List = List + dvdArray[i].getTitle() + '/'
 						+ dvdArray[i].getRating() + '/'
-						+ dvdArray[i].getRunningTime() + "\n";m
+						+ dvdArray[i].getRunningTime() + "\n";
  		}
 
 		return List;
@@ -59,12 +60,9 @@ public class DVDCollection {
 
 
 
-
-
-
 	
 	}
-	
+
 	public void removeDVD(String title) {
 
 		title.toUpperCase();
@@ -73,20 +71,13 @@ public class DVDCollection {
 		for (int i = 0; i < dvdArray.length; i++) {
 			DVD currentDVD = dvdArray[i];
 			for (int j = 0; j < title.length(); j++) {
-				if (title[j] == dvdArray){
+				//if (title[j] == dvdArray){
 
-				}
 			}
 		}
+	}
 		
 
-
-
-
-
-
-
-	}
 	
 	public String getDVDsByRating(String rating) {
 
@@ -134,7 +125,19 @@ public class DVDCollection {
 
 	// Additional private helper methods go here:
 
+	public int dvdSearch(String titles) {
+		if (numdvds > 0) {
+			for (int i = 0; i < numdvds; i++) {
+				if (dvdArray[i].getTitle().equals(titles))
+					return i;
+			}
+		}
+		return -1;
+	}
+}
 
-
-	
+class dvdSort implements Comparator<DVD> {
+	public int compare(DVD one, DVD two) {
+		return one.getTitle().compareTo((two.getTitle()));
+	}
 }
