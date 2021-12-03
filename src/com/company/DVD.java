@@ -32,25 +32,15 @@ public class DVD {
 		return runningTime;
 	}
 
-	public void setTitle(String newTitle) {
+	public void setTitle(String newTitle) { title = newTitle; }
 
-		title = newTitle;
-	}
+	public void setRating(String newRating) { rating = newRating;}
 
-	public void setRating(String newRating) {
+	public void setRunningTime(int newRunningTime) { runningTime = newRunningTime; }
 
-		rating = newRating;
-	}
+	public String toString() { return title + "/" + rating + "/" + runningTime; }
 
-	public void setRunningTime(int newRunningTime) {
-
-		runningTime = newRunningTime;
-	}
-
-	public String toString() {
-
-		return title + "/" + rating + "/" + runningTime;
-	}
+	public int compare(DVD name) { return this.getTitle().compareTo(name.getTitle()); }
 }
 
 //class sortDVDs implements Comparator<DVD> {

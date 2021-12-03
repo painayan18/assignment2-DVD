@@ -40,13 +40,13 @@ public class DVDCollection {
 
 		String List = "";
 
-		List = "numdvds = " + numdvds + "\n";
-		List = "dvdarray.length = " + dvdArray.length + "\n";
+		List =    "numdvds = " + numdvds + "\n"
+				+ "dvdarray.length = " + dvdArray.length + "\n";
 
 		for (int i = 0; i <+ numdvds; i++) {
-			List = List + dvdArray[i].getTitle() + '/'
-						+ dvdArray[i].getRating() + '/'
-						+ dvdArray[i].getRunningTime() + "\n";
+			List +=   dvdArray[i].getTitle() + '/'
+					+ dvdArray[i].getRating() + '/'
+					+ dvdArray[i].getRunningTime() + "\n";
  		}
 
 		return List;
@@ -58,21 +58,45 @@ public class DVDCollection {
 		// If the array is full and a new DVD needs to be added,
 		// double the size of the array first.
 
+		try {
 
+			if (numdvds == dvdArray.length)
+				dvdArray = java.util.Arrays.copyOf(dvdArray, dvdArray.length*2);
 
-	
+			// convert runningTime back to String from int
+			int runTime = Integer.parseInt(runningTime);
+
+			boolean dvdExists = false;
+
+			for (int i = 0; i < numdvds; i++) {
+				if (!dvdExists)
+					if (dvdArray[i].getTitle().compareToIgnoreCase(title) == 0) {
+						dvdArray[i].setRating(rating);
+						dvdArray[i].setRunningTime(runTime);
+						dvdExists = true;
+					}
+				modified = true;
+			}
+
+			if (!dvdExists) {
+				DVD newDVD = new DVD(title, rating, runTime);
+				dvdArray[numdvds++] = newDVD;
+				java.util.Arrays.sort(dvdArray);
+			}
+
+		} catch (NumberFormatException error) {
+			System.out.println("Run time format is invalid.");
+		}
 	}
 
 	public void removeDVD(String title) {
 
-		title.toUpperCase();
-		boolean titleMatch = false;
-
-		for (int i = 0; i < dvdArray.length; i++) {
-			DVD currentDVD = dvdArray[i];
-			for (int j = 0; j < title.length(); j++) {
-				//if (title[j] == dvdArray){
-
+		for (int i = 0; i < numdvds; i++) {
+			if (dvdArray[i].getTitle().compareToIgnoreCase(title) == 1) {
+				for (int j = i; j < numdvds-1; j++) {
+					dvdArray[i] = dvdArray[i + 1];
+					dvdArray[i+1] = null;
+				}
 			}
 		}
 	}
@@ -105,12 +129,22 @@ public class DVDCollection {
 	
 	public void loadData(String filename) {
 
+		BufferedReader buffer;
 
+		try {
+			buffer = new BufferedReader(new FileReader(filename));
+			sourceName = filename;
+			String line = buffer.readLine();
 
+			while (line != null) {
+				String[] dvdData = line.split(",");
+				addOrModifyDVD(dvdData[0], dvdData[1], dvdData[2]);
+			}
 
-
-
-		
+			buffer.close();
+		} catch (IOException error) {
+			error.printStackTrace();
+		}
 	}
 	
 	public void save() {
@@ -125,15 +159,17 @@ public class DVDCollection {
 
 	// Additional private helper methods go here:
 
-	public int dvdSearch(String titles) {
+	public int dvdSearch(String title) {
 		if (numdvds > 0) {
 			for (int i = 0; i < numdvds; i++) {
-				if (dvdArray[i].getTitle().equals(titles))
+				if (dvdArray[i].getTitle().equals(title))
 					return i;
 			}
 		}
 		return -1;
 	}
+
+	public void addHelper(int index, DVD )
 }
 
 class dvdSort implements Comparator<DVD> {
@@ -141,3 +177,4 @@ class dvdSort implements Comparator<DVD> {
 		return one.getTitle().compareTo((two.getTitle()));
 	}
 }
+
