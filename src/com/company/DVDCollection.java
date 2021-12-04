@@ -1,5 +1,6 @@
 package com.company;
 
+import javax.annotation.processing.Filer;
 import java.io.*;
 import java.util.Comparator;
 import java.util.Locale;
@@ -38,18 +39,18 @@ public class DVDCollection {
 		// the values for numdvds and the length of the array.
 		// See homework instructions for proper format.
 
-		String List = "";
+		String listDVDs = "";
 
-		List =    "numdvds = " + numdvds + "\n"
+		listDVDs =    "numdvds = " + numdvds + "\n"
 				+ "dvdarray.length = " + dvdArray.length + "\n";
 
 		for (int i = 0; i <+ numdvds; i++) {
-			List +=   dvdArray[i].getTitle() + '/'
+			listDVDs +=   dvdArray[i].getTitle() + '/'
 					+ dvdArray[i].getRating() + '/'
 					+ dvdArray[i].getRunningTime() + "\n";
  		}
 
-		return List;
+		return listDVDs;
 	}
 
 	public void addOrModifyDVD(String title, String rating, String runningTime) {
@@ -100,61 +101,67 @@ public class DVDCollection {
 			}
 		}
 	}
-		
-
 	
 	public String getDVDsByRating(String rating) {
 
+		String listByRating = "";
 
+		for (int i = 0; i < numdvds; i++) {
+			if (dvdArray[i].getRating().compareTo(rating) == 1)
+				listByRating += dvdArray[i].toString() + "\n";
+		}
 
-
-
-
-		return null;	// STUB: Remove this line.
-
+		return listByRating;
 	}
 
 	public int getTotalRunningTime() {
 
+		if (numdvds == 0)
+			return 0;
 
+		int totalRunningTime = 0;
 
+		for (int i = 0; i < numdvds; i++) {
+			totalRunningTime += Integer.parseInt(dvdArray[i].getRating());
+		}
 
-
-
-
-		return 0;	// STUB: Remove this line.
-
+		return totalRunningTime;
 	}
 
 	
 	public void loadData(String filename) {
 
-		BufferedReader buffer;
+		BufferedReader file;
 
 		try {
-			buffer = new BufferedReader(new FileReader(filename));
+			file = new BufferedReader(new FileReader(filename));
 			sourceName = filename;
-			String line = buffer.readLine();
+			String line = file.readLine();
 
 			while (line != null) {
 				String[] dvdData = line.split(",");
 				addOrModifyDVD(dvdData[0], dvdData[1], dvdData[2]);
 			}
 
-			buffer.close();
+			file.close();
 		} catch (IOException error) {
 			error.printStackTrace();
 		}
 	}
-	
+
 	public void save() {
 
-
-
-
-
-
-
+		try {
+			FileWriter file = new FileWriter("filename.txt");
+			for (int i = 0; i < numdvds; i++) {
+				file.write(dvdArray[i].getTitle() + "/"
+							+ dvdArray[i].getRating() + "/"
+							+ dvdArray[i].getRunningTime()
+							+ "\n");
+			}
+		} catch (IOException e) {
+			System.out.println("An error occurred: Could not find the file.");
+		}
 	}
 
 	// Additional private helper methods go here:
@@ -168,13 +175,11 @@ public class DVDCollection {
 		}
 		return -1;
 	}
-
-	public void addHelper(int index, DVD )
 }
 
-class dvdSort implements Comparator<DVD> {
-	public int compare(DVD one, DVD two) {
-		return one.getTitle().compareTo((two.getTitle()));
-	}
-}
+//class dvdSort implements Comparator<DVD> {
+//	public int compare(DVD one, DVD two) {
+//		return one.getTitle().compareTo((two.getTitle()));
+//	}
+//}
 
